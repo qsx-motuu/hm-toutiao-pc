@@ -4,6 +4,10 @@ import App from './App.vue'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import router from '@/router'
+// 引入axios
+import axios from '@/api'
+// 挂载axios
+Vue.prototype.$axios = axios
 // 使用ElementUI
 Vue.use(ElementUI)
 Vue.config.productionTip = false
