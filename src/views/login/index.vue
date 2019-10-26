@@ -7,32 +7,15 @@
       <!-- 表单组件 -->
       <el-form ref="form" :model="loginForm">
         <!-- 输入框 -->
-        <!-- <el-form-item>
+        <el-form-item>
           <el-input v-model="loginForm.mobile" placeholder="请输入手机号"></el-input>
-        </el-form-item>-->
-        <el-form-item
-          prop="mobile"
-          :rules="[
-      { required: true, message: '年龄不能为空'},
-      { type: 'number', message: '年龄必须为数字值'}
-    ]"
-        >
-          <el-input type="age" v-model.number="loginForm.mobile" autocomplete="off"></el-input>
         </el-form-item>
-        <!-- <el-form-item>
+        <el-form-item>
           <el-input
             v-model="loginForm.code"
             placeholder="请输入验证码"
             style="width:235px;margin-right:10px;"
-          ></el-input> -->
-          <el-form-item
-          prop="mobile"
-          :rules="[
-      { required: true, message: '年龄不能为空'},
-      { type: 'number', message: '年龄必须为数字值'}
-    ]"
-        >
-          <el-input type="age" v-model.number="loginForm.mobile" autocomplete="off" style="width:235px;margin-right:10px;"></el-input>
+          ></el-input>
           <el-button>发送验证码</el-button>
         </el-form-item>
         <el-form-item>
