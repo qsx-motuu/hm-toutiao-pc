@@ -31,9 +31,11 @@
 </template>
 
 <script>
+import local from '@/utils/local'
 export default {
   data () {
     const checkMobile = (rule, value, callback) => {
+      // 验证机号
       if (/^1[3-9]\d{9}$/.test(value)) {
         callback()// 成功
       } else {
@@ -42,9 +44,10 @@ export default {
       }
     }
     return {
+      // 用户信息
       loginForm: {
-        mobile: '',
-        code: ''
+        mobile: '13699998888',
+        code: '246810'
       },
       // 添加简单校验功能
       loginRules: {
@@ -62,20 +65,20 @@ export default {
     }
   },
   methods: {
-    open () {
-      this.$message({
-        message: '恭喜你，这是一条成功消息',
-        type: 'success'
-      })
-    },
+    // 登录事件
     login () {
+      // 获取from表单组件
       this.$refs['loginForm'].validate((valid) => {
         if (valid) {
+          // 登录请求
           this.$axios({
             url: '/authorizations',
             method: 'post',
             data: this.loginForm
           }).then(res => {
+            // console.log(res)
+            // 登录成功后保存用户信息
+            local.setUser(res.data.data)
             this.$router.push('/')
           }).catch(() => {
             this.$message.error('手机号或者验证码错误，请重新输入')

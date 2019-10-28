@@ -5,7 +5,24 @@
 </template>
 
 <script>
-export default {}
+export default {
+  created () {
+    // this.$axios({
+    //   url: '/articles'
+    // }).then(res => {
+    //   console.log(res.data)
+    // }).catch(err => {
+    //   console.log(err)
+    // })
+    this.getText()
+  },
+  methods: {
+    getText: async function () {
+      const res = await this.$axios('/articles')
+      console.log(res)
+    }
+  }
+}
 </script>
 
 <style>
