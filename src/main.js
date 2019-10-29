@@ -6,6 +6,8 @@ import 'element-ui/lib/theme-chalk/index.css'
 import router from '@/router'
 // 引入axios
 import axios from '@/api'
+import plugin from '@/components'
+Vue.use(plugin)
 // 挂载axios
 Vue.prototype.$axios = axios
 // 使用ElementUI

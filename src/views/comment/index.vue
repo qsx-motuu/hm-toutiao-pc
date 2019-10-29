@@ -1,5 +1,11 @@
 <template>
-  <div>5</div>
+  <div class="container-article">
+    <el-card>
+      <div slot="header">
+        <my-bread>评论管理</my-bread>
+      </div>
+    </el-card>
+  </div>
 </template>
 
 <script>

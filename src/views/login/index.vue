@@ -68,23 +68,25 @@ export default {
     // 登录事件
     login () {
       // 获取from表单组件
-      this.$refs['loginForm'].validate((valid) => {
+      this.$refs['loginForm'].validate(async (valid) => {
         if (valid) {
           // 登录请求
-          this.$axios({
-            url: '/authorizations',
-            method: 'post',
-            data: this.loginForm
-          }).then(res => {
-            // console.log(res)
+          try {
+            // 发送请求
+            const { data: { data } } = await this.$axios({
+              url: '/authorizations',
+              method: 'post',
+              data: this.loginForm
+            })
+            // console.log(data)
             // 登录成功后保存用户信息
-            local.setUser(res.data.data)
+            local.setUser(data)
             this.$router.push('/')
-          }).catch(() => {
+          } catch (error) {
             this.$message.error('手机号或者验证码错误，请重新输入')
             this.loginForm.mobile = ''
             this.loginForm.code = ''
-          })
+          }
         }
       })
     }

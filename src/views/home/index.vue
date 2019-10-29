@@ -5,7 +5,7 @@
       <div class="logo" :class="{smallLogo:isOpen}"></div>
       <!-- 下拉菜单 -->
       <el-menu
-        default-active="/"
+        :default-active="$route.path"
         background-color="#002033"
         text-color="#fff"
         active-text-color="#ffd04b"
@@ -50,15 +50,15 @@
         <!-- 文字 -->
         <span class="text">江苏传智播客科技教育有限公司</span>
         <!-- 下拉菜单 -->
-        <el-dropdown class="dropdown" @command="userOut">
+        <el-dropdown class="dropdown" @command="loginOut">
           <span class="el-dropdown-link">
-            <img ref="user" v-bind:src="user.imgUrl" alt class="headImg" />
-            <span class="username">{{user.username}}</span>
+            <img ref="user" v-bind:src="userIbfo.imgUrl" alt class="headImg" />
+            <span class="username">{{userIbfo.username}}</span>
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown" >
-            <el-dropdown-item icon="el-icon-setting" command="set">个人设置</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-unlock" command="out">退出登录</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-setting" command="setting">个人设置</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-unlock" command="loginout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-header>
@@ -76,7 +76,7 @@ export default {
     return {
       // 导航栏是否折叠，默认为true折叠
       isOpen: false,
-      user: {
+      userIbfo: {
         username: '',
         imgUrl: require('../../assets/avatar.jpg')
       }
@@ -88,37 +88,37 @@ export default {
       // 触发事件，更改isOpen
       this.isOpen = !this.isOpen
     },
-    userOut (a) {
+    loginOut (a) {
       switch (a) {
-        case 'out':
-          alert(2)
-          local.delUser()
-          this.$router.push('/login')
+        case 'loginout':
+          this.$confirm('此操作将要退出该系统, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$message({
+              type: 'success',
+              message: '退出成功!'
+            })
+            local.delUser()
+            this.$router.push('/login')
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消退出'
+            })
+          })
           break
-        default:alert(1)
+        default:this.$router.push('/setting')
           break
       }
-      // local.delUser()
-      // this.$router.push('/login')
-    },
-    userOut1 () {
-      // local.delUser()
-      // this.$router.push('/login')
     }
   },
   created () {
     // 请求个人信息
-    // this.$axios({
-    //   url: '/user/profile'
-    // }).then(res => {
-    //   // console.log(this.$refs)
-    //   // console.log(res.data)
-    //   this.user.username = res.data.data.name
-    //   this.user.imgUrl = res.data.data.photo
-    // })
     let { name, photo } = local.getUser()
-    this.user.username = name
-    this.user.imgUrl = photo
+    this.userIbfo.username = name
+    this.userIbfo.imgUrl = photo
   }
 }
 </script>
