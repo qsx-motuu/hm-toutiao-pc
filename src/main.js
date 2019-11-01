@@ -7,6 +7,7 @@ import router from '@/router'
 // 引入axios
 import axios from '@/api'
 import plugin from '@/components'
+import './styles/index.less'
 Vue.use(plugin)
 // 挂载axios
 Vue.prototype.$axios = axios

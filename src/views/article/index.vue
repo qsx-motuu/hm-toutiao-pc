@@ -16,14 +16,9 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="频道：">
-          <el-select v-model="reqParams.channe_id" placeholder="请选择" clearable>
-            <el-option
-              v-for="item in channeOptions"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
+          <!-- 封装频道插件 -->
+          <!-- 组件加上v-model，相当于加上了value属性和input事件 -->
+          <my-channel v-model="reqParams.channel_id"></my-channel>
         </el-form-item>
         <el-form-item label="日期：">
           <el-date-picker
@@ -103,7 +98,7 @@ export default {
       // 使用axios提交数据时，如果数据值为null是不会提交该字段
       reqParams: {
         status: null,
-        channe_id: null,
+        channel_id: null,
         begin_pubdate: null,
         end_pubdate: null,
         // 显示20条一页
@@ -122,20 +117,20 @@ export default {
     }
   },
   created () {
-    this.getChanneOptions()
+    // this.getChanneOptions()
     this.getArticle()
   },
   methods: {
-    // 请求数据，获取频道筛选数据
-    async getChanneOptions () {
-      // 接口请求数据
-      const {
-        data: { data }
-      } = await this.$axios.get('/channels')
-      // console.log(data)
-      // 赋值
-      this.channeOptions = data.channels
-    },
+    // // 请求数据，获取频道筛选数据
+    // async getChanneOptions () {
+    //   // 接口请求数据
+    //   const {
+    //     data: { data }
+    //   } = await this.$axios.get('/channels')
+    //   // console.log(data)
+    //   // 赋值
+    //   this.channeOptions = data.channels
+    // },
     // 请求接口，获取筛选结果数据 文章列表
     async getArticle () {
       const {
@@ -157,7 +152,7 @@ export default {
     // 筛选查询
     search () {
       // 判断频道的值是否为‘’
-      if (this.reqParams.channe_id === '') this.reqParams.channe_id = null
+      if (this.reqParams.channel_id === '') this.reqParams.channel_id = null
       // 回到第一页
       this.reqParams.page = 1
       // 重新获取文章
