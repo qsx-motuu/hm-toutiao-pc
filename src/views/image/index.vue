@@ -163,8 +163,8 @@ export default {
 .img_list {
   padding-top: 20px;
   .img_item {
-    width: 180px;
-    height: 180px;
+    width: 250px;
+    height: 250px;
     position: relative;
     border: 1px dashed #ddd;
     display: inline-block;
