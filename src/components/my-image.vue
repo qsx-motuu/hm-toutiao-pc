@@ -2,7 +2,8 @@
   <div class="my_image">
     <!-- 按钮 -->
     <div class="btn_box" @click="open">
-      <img src="../assets/default.png" />
+      <!-- 默认图和选择的图切换传值 接收 -->
+      <img :src="value||btnImage" />
     </div>
     <!-- 对话框 -->
     <el-dialog :visible.sync="dialogVisible" width="750px">
@@ -30,6 +31,7 @@
           ></el-pagination>
         </el-tab-pane>
         <el-tab-pane label="上传图片" name="upload">
+          <!-- 上传图片组件 -->
           <el-upload
             class="avatar-uploader"
             action="http://ttapi.research.itcast.cn/mp/v1_0/user/images"
@@ -45,14 +47,19 @@
       </el-tabs>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="confirmImage">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
+// 引入静态图片
+import defaultImage from '../assets/default.png'
 export default {
+  // 封面图片地址
+  // 父传子
+  props: ['value'],
   data () {
     return {
       // 对话框显示隐藏
@@ -71,12 +78,15 @@ export default {
       total: 0,
       // 上传的图片地址
       uploadImageUrl: null,
+      // 素材图片
       selectedImageUrl: null,
       headers: {
         Authorization:
           'Bearer ' +
           JSON.parse(window.sessionStorage.getItem('hm_toutiao_pc')).token
-      }
+      },
+      // 按钮上的预览图
+      btnImage: defaultImage
     }
   },
   methods: {
@@ -86,16 +96,20 @@ export default {
       // 加载素材列表
       this.getImages()
     },
+    // 分页 下一页
     pager (newPage) {
       this.reqParams.page = newPage
       this.getImages()
     },
+    // 收藏、全部切换
     toggleList () {
+      // 保持当前页数
       this.reqParams.page = 1
       this.getImages()
     },
     // 获取素材列表数据
     async getImages () {
+      // 请求
       const {
         data: { data }
       } = await this.$axios.get('user/images', { params: this.reqParams })
@@ -111,6 +125,41 @@ export default {
     handleSuccess (res) {
       this.uploadImageUrl = res.data.url
       this.$message.success('上传成功')
+    },
+    // 上传图片确定事件
+    confirmImage () {
+      // 判断当前选项卡
+      if (this.activeName === 'image') {
+        // 素材库
+        // 判断是否选择一张图片
+        if (!this.selectedImageUrl) {
+          // 没有选择图片，提示
+          return this.$message.warning('请选择一张图片')
+        } else {
+          // 选择了图片
+          // 赋值给图片按钮，预览
+          // this.btnImage = this.selectedImageUrl
+          // 子传父 提交父组件
+          this.$emit('input', this.selectedImageUrl)
+          // 关闭对话框
+          this.dialogVisible = false
+        }
+      } else {
+        // 上传图片
+        // 判断是否上传一张图片
+        if (!this.uploadImageUrl) {
+          // 没有上传图片，提示
+          return this.$message.warning('请上传一张图片')
+        } else {
+          // 上传了图片
+          // 赋值给图片按钮，预览
+          // this.btnImage = this.uploadImageUrl
+          // 子传父 提交父组件
+          this.$emit('input', this.uploadImageUrl)
+          // 关闭对话框
+          this.dialogVisible = false
+        }
+      }
     }
   }
 }
