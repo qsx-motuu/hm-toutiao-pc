@@ -52,8 +52,8 @@
         <!-- 下拉菜单 -->
         <el-dropdown class="dropdown" @command="loginOut">
           <span class="el-dropdown-link">
-            <img ref="user" v-bind:src="userIbfo.imgUrl" alt class="headImg" />
-            <span class="username">{{userIbfo.username}}</span>
+            <img :src="userIbfo.photo" alt class="headImg" />
+            <span class="username">{{userIbfo.name}}</span>
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown" >
@@ -71,16 +71,16 @@
 
 <script>
 import local from '@/utils/local'
+import eventBus from '@/eventBus'
 export default {
   data () {
     return {
       // 导航栏是否折叠，默认为true折叠
       isOpen: false,
       userIbfo: {
-        username: '',
-        imgUrl: require('../../assets/avatar.jpg')
+        name: '',
+        photo: ''
       }
-
     }
   },
   methods: {
@@ -116,9 +116,19 @@ export default {
   },
   created () {
     // 请求个人信息
-    let { name, photo } = local.getUser()
-    this.userIbfo.username = name
-    this.userIbfo.imgUrl = photo
+    const user = local.getUser() || {}
+    this.userIbfo.name = user.name
+    this.userIbfo.photo = user.photo
+    // 绑定事件，修改name
+    eventBus.$on('updataName', (name) => {
+      console.log(name)
+      this.userIbfo.name = name
+    })
+    // 绑定事件，修改photo
+    eventBus.$on('updataPhoto', (photo) => {
+      // console.log(photo)
+      this.userIbfo.photo = photo
+    })
   }
 }
 </script>
